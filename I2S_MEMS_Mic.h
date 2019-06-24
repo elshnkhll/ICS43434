@@ -25,7 +25,7 @@ int retStat = 0;
 uint32_t sampleIn = 0;
 
 
-int32_t avgGain = 0, peaks[2] = {0, 0}, avgSampleIn = 0;
+int32_t avgSampleIn = 0;
 
 
 void Mic_Init() {
@@ -40,25 +40,13 @@ void Mic_Init() {
 
   Serial.print("\r\nBegin Level detect...");
   Serial.print("\r\n\tRead 4000 samples to level out...");
+  
   //This pulls in a bunch of samples and does nothing, its just used to settle the mics output
   for (retStat = 0; retStat < numOfBlanks * 2; retStat++)  {
     i2s_pop_sample((i2s_port_t)i2s_num, (char*)&sampleIn, portMAX_DELAY);
     delay(1);
   }
-  //Pull in x number of samples (IN A QUITE ENVIRONMENT) and create the base gain average(the zero point for the mic)
-  Serial.print("\r\n\tRead 2000 samples to get avg...");
-  for (retStat = 0; retStat < numOfBlanks; retStat++)  {
-    i2s_pop_sample((i2s_port_t)i2s_num, (char*)&sampleIn, portMAX_DELAY);
-    sampleIn >>= 14;
-    avgGain -= sampleIn;
-    delay(1);
-  }
-  avgGain = avgGain / numOfBlanks;
-  Serial.printf("\t\tAVG Gain=\t%i", avgGain);
-  peaks[0] = avgGain;
-  peaks[1] = -avgGain;
-  Serial.printf("\r\n\tSetting MAX gain to\t%i\tMin Gain to\t%i\r\n", peaks[0], peaks[1]);
-  delay(1000);
+
 }
 
 int32_t Mic_Get_Sample() {
@@ -75,7 +63,7 @@ int32_t Mic_Get_Sample() {
 
   sampleIn16 = round((float)avgSampleIn / smoothingReads);
 
-  avgSampleIn = round( ((float)(sampleIn16 + 40000) / 40000 ) * 16000 ); // 16 bit unsigned
+  avgSampleIn = round( ((float)(sampleIn16 + + 0x8000) / + 0x8000 ) * 16000 ); 
 
   return avgSampleIn;
 
