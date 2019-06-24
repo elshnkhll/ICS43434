@@ -63,7 +63,7 @@ int32_t Mic_Get_Sample() {
 
   sampleIn16 = round((float)avgSampleIn / smoothingReads);
 
-  avgSampleIn = round( ((float)(sampleIn16 + + 0x8000) / + 0x8000 ) * 16000 ); 
+  avgSampleIn = round( ((float)(sampleIn16 + 0x8000) / 0x8000 ) * 16000 ); 
 
   return avgSampleIn;
 
