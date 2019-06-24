@@ -1,6 +1,3 @@
-/*  Adafruit I2S MEMS Microphone Breakout - SPH0645LM4H PID: 3421 */
-/*  https://www.adafruit.com/product/3421 */
-
 #include <WiFi.h>
 #include "driver/i2s.h"
 #include "I2S_MEMS_Mic.h"
